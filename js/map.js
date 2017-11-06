@@ -4,6 +4,13 @@ Map = new class {
 
     this.tiles = [];
 
+    this.reset();
+  }
+
+  reset() {
+
+    this.tiles = [];
+
     let x = 0;
 
     for (x; x < NUMBER_OF_TILES_X; ++x) {
@@ -92,7 +99,7 @@ Map = new class {
         let axis_y = this.tiles[x][y].substring(4, 5);
 
         // Draw grass beneath each tile.
-        Momo.drawPartialImage(
+        Momo.drawClippedBitmap(
 
           atlas,
 
@@ -110,7 +117,7 @@ Map = new class {
         );
 
         // Draw each tile.
-        Momo.drawPartialImage(
+        Momo.drawClippedBitmap(
 
           atlas,
 

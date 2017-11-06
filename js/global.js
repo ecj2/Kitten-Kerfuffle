@@ -3,14 +3,14 @@ let Map = undefined;
 let Nini = undefined;
 let Camera = undefined;
 
-// Images.
+// Bitmaps.
 let atlas = undefined;
 let arrow = undefined;
 
 // Fonts.
 let font = undefined;
 
-// Sounds.
+// Samples.
 let meow = undefined;
 let annoying = undefined;
 let kitten_meow = undefined;

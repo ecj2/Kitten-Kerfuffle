@@ -76,6 +76,98 @@ function main() {
   );
 }
 
+function reset() {
+
+  Map.reset();
+
+  shortest_distance = 0;
+  nearest_kitten_number = 0;
+
+  angle = 0;
+  new_angle = 0;
+
+  current_time = "15:00";
+
+  hours = 15;
+  minutes = 0;
+  seconds = 0;
+
+  ticks = 0;
+
+  flash_ticks = 0;
+
+  flash_yellow = false;
+
+  gain = 1.0;
+
+  strings = [""];
+
+  fade_intro = true;
+
+  credits_y = 0;
+
+  ready_to_win = false;
+  ready_to_lose = false;
+
+  alpha = [0.0, 255.0, 0.0];
+
+  kittens = [];
+
+  kittens_found = 0;
+
+  points = 0;
+
+  Nini.reset();
+
+  Nini.spawn();
+
+  let kitten_names = [
+
+    "Cocoa",
+
+    "Fred",
+
+    "Brownie",
+
+    "Mac",
+
+    "Mittens",
+
+    "Cheese",
+
+    "Niki",
+
+    "Bob",
+
+    "Mimi",
+
+    "Bub",
+
+    "Gus",
+
+    "Mochi",
+
+    "Bitsy",
+
+    "Doughnut",
+
+    "Tom"
+  ];
+
+  let i = 0;
+
+  for (i; i < kitten_names.length; ++i) {
+
+    // Spawn kittens.
+
+    kittens[i] = new Kitten();
+
+    kittens[i].spawn();
+
+    kittens[i].setName(kitten_names[i]);
+  }
+}
+
 function update() {
 
   if (Momo.isKeyPressed("e")) {
@@ -91,11 +183,11 @@ function update() {
 
   if (gain > 0.1) {
 
-    Momo.playSound(annoying, gain, 1.0, true);
+    Momo.playSample(annoying, gain, 1.0, true, 0);
   }
   else {
 
-    Momo.stopSound(annoying);
+    Momo.stopSample(0);
   }
 
   switch (state) {
@@ -106,7 +198,6 @@ function update() {
 
       if (Momo.isKeyPressed("z")) {
 
-        // @TODO: Fade into the next state with a black transition.
         ++state;
       }
     break;
@@ -289,6 +380,13 @@ function update() {
       // Credits.
 
       credits_y += 2;
+
+      if (credits_y > 1150 && Momo.isKeyPressed("z")) {
+
+        state = 0;
+
+        reset();
+      }
     break;
   }
 }
@@ -336,7 +434,7 @@ function render() {
 
           72 + (32 * (i === strings.length - 1 ? 7 : i)),
 
-          Momo.TEXT_ALIGN_LEFT,
+          "left",
 
           strings[i]
         );
@@ -381,7 +479,7 @@ function render() {
 
             kittens[i].getY() - Camera.getY() - TILE_SIZE / 2,
 
-            Momo.TEXT_ALIGN_CENTER,
+            "center",
 
             kittens[i].getName()
           );
@@ -391,7 +489,7 @@ function render() {
       if (kittens_found < kittens.length) {
 
         // Draw compass pointing to nearest kitten.
-        Momo.drawRotatedImage(
+        Momo.drawRotatedBitmap(
 
           arrow,
 
@@ -448,7 +546,7 @@ function render() {
 
         16,
 
-        Momo.TEXT_ALIGN_LEFT,
+        "left",
 
         "Score: " + points
       );
@@ -465,7 +563,7 @@ function render() {
 
         16,
 
-        Momo.TEXT_ALIGN_CENTER,
+        "center",
 
         kittens_found + "/" + kittens.length
       );
@@ -482,7 +580,7 @@ function render() {
 
         CANVAS_H - 32,
 
-        Momo.TEXT_ALIGN_LEFT,
+        "left",
 
         kittens[nearest_kitten_number].getName() + ": " + shortest_distance + "m"
       );*/
@@ -499,7 +597,7 @@ function render() {
 
         16,
 
-        Momo.TEXT_ALIGN_RIGHT,
+        "right",
 
         "Time: " + current_time
       );
@@ -577,7 +675,7 @@ function render() {
 
           72 + (32 * i),
 
-          Momo.TEXT_ALIGN_LEFT,
+          "left",
 
           strings[i]
         );
@@ -634,7 +732,7 @@ function render() {
 
           72 + (32 * i),
 
-          Momo.TEXT_ALIGN_LEFT,
+          "left",
 
           strings[i]
         );
@@ -683,12 +781,16 @@ function render() {
 
         "Special Thanks",
 
-        "Robin Kettman"
+        "Robin Kettman",
+
+        "Alex"
       ];
 
       let sizes = [
 
         32,
+
+        16,
 
         16,
 
@@ -765,6 +867,8 @@ function render() {
 
         Momo.makeColor(255, 0, 0),
 
+        Momo.makeColor(255, 255, 255),
+
         Momo.makeColor(255, 255, 255)
       ];
 
@@ -784,13 +888,13 @@ function render() {
 
           CANVAS_H - credits_y + (TILE_SIZE / 2 * i),
 
-          Momo.TEXT_ALIGN_CENTER,
+          "center",
 
           strings[i]
         );
       }
 
-      Momo.drawPartialImage(
+      Momo.drawClippedBitmap(
 
         atlas,
 
@@ -819,11 +923,28 @@ function render() {
 
           CANVAS_W / 2,
 
-          CANVAS_H / 2,
+          CANVAS_H / 2 - 16,
 
-          Momo.TEXT_ALIGN_CENTER,
+          "center",
 
           "Thanks for playing!"
+        );
+
+        Momo.drawText(
+
+          font,
+
+          Momo.makeColor(255, 255, 255),
+
+          16,
+
+          CANVAS_W / 2,
+
+          CANVAS_H / 2 + 16,
+
+          "center",
+
+          "Press \"Z\" to play again."
         );
       }
     break;
@@ -834,67 +955,21 @@ function loadResources() {
 
   let result = true;
 
-  // Load images.
-  atlas = Momo.loadImage("data/png/atlas.png");
-  arrow = Momo.loadImage("data/png/arrow.png");
+  // Load bitmaps.
+  atlas = Momo.loadBitmap("data/png/atlas.png");
+  arrow = Momo.loadBitmap("data/png/arrow.png");
 
   // Load fonts.
   font = Momo.loadFont("data/ttf/font.ttf");
 
-  // Load sounds.
-  meow = Momo.loadSound("data/mp3/meow.mp3");
-  annoying = Momo.loadSound("data/mp3/annoying.mp3");
-  kitten_meow = Momo.loadSound("data/mp3/kitten_meow.mp3");
+  // Load samples.
+  meow = Momo.loadSample("data/mp3/meow.mp3");
+  annoying = Momo.loadSample("data/mp3/annoying.mp3");
+  kitten_meow = Momo.loadSample("data/mp3/kitten_meow.mp3");
 
   result = !!meow && !!annoying && !!kitten_meow;
 
-  Nini.spawn();
-
-  let kitten_names = [
-
-    "Cocoa",
-
-    "Fred",
-
-    "Brownie",
-
-    "Mac",
-
-    "Mittens",
-
-    "Cheese",
-
-    "Niki",
-
-    "Bob",
-
-    "Mimi",
-
-    "Bub",
-
-    "Gus",
-
-    "Mochi",
-
-    "Bitsy",
-
-    "Doughnut",
-
-    "Tom"
-  ];
-
-  let i = 0;
-
-  for (i; i < kitten_names.length; ++i) {
-
-    // Spawn kittens.
-
-    kittens[i] = new Kitten();
-
-    kittens[i].spawn();
-
-    kittens[i].setName(kitten_names[i]);
-  }
+  reset();
 
   return result;
 }

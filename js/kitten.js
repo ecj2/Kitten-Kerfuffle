@@ -300,7 +300,7 @@ class Kitten {
       return;
     }
 
-    Momo.drawPartialImage(
+    Momo.drawClippedBitmap(
 
       atlas,
 

@@ -2,30 +2,7 @@ Nini = new class {
 
   constructor() {
 
-    this.x = 256;
-    this.y = 256 * 4;
-
-    this.speed = 4;
-
-    this.facing = getRandomNumber() % 2;
-
-    this.moving = false;
-
-    this.move = [false, false, false, false];
-
-    this.start_tile = -1;
-    this.stop_tile = -1;
-
-    this.animation_ticks = 0;
-    this.animation_frames = 0;
-
-    this.meow_ticks = 0;
-
-    this.wait_ticks = 0;
-
-    this.meow = false;
-
-    this.meow_range = 1;
+    this.reset();
   }
 
   update() {
@@ -42,7 +19,7 @@ Nini = new class {
 
         this.wait_ticks = 0;
 
-        Momo.playSound(meow, 1.0, 1.0, false);
+        Momo.playSample(meow, 1.0, 1.0, false, 1);
 
         this.meow = true;
 
@@ -135,7 +112,7 @@ Nini = new class {
 
       points += 100;
 
-      Momo.playSound(kitten_meow, 1.0, 1.0, false);
+      Momo.playSample(kitten_meow, 1.0, 1.0, false, 2);
 
       if (this.meow_range < 3) {
 
@@ -275,7 +252,7 @@ Nini = new class {
         this.meow = false;
       }
 
-      Momo.drawPartialImage(
+      Momo.drawClippedBitmap(
 
         atlas,
 
@@ -296,7 +273,7 @@ Nini = new class {
 
       // Draw Nini normally.
 
-      Momo.drawPartialImage(
+      Momo.drawClippedBitmap(
 
         atlas,
 
@@ -323,6 +300,34 @@ Nini = new class {
   getY() {
 
     return this.y;
+  }
+
+  reset() {
+
+    this.x = 256;
+    this.y = 256 * 4;
+
+    this.speed = 4;
+
+    this.facing = getRandomNumber() % 2;
+
+    this.moving = false;
+
+    this.move = [false, false, false, false];
+
+    this.start_tile = -1;
+    this.stop_tile = -1;
+
+    this.animation_ticks = 0;
+    this.animation_frames = 0;
+
+    this.meow_ticks = 0;
+
+    this.wait_ticks = 0;
+
+    this.meow = false;
+
+    this.meow_range = 1;
   }
 
   spawn() {
@@ -385,7 +390,7 @@ Nini = new class {
 
             kittens[j].returnToMama();
 
-            Momo.playSound(kitten_meow, 1.0, 1.0, false);
+            Momo.playSample(kitten_meow, 1.0, 1.0, false, 2);
 
             ++kittens_found;
           }
@@ -444,7 +449,7 @@ Nini = new class {
 
             kittens[j].returnToMama();
 
-            Momo.playSound(kitten_meow, 1.0, 1.0, false);
+            Momo.playSample(kitten_meow, 1.0, 1.0, false, 2);
 
             ++kittens_found;
           }
@@ -503,7 +508,7 @@ Nini = new class {
 
             kittens[j].returnToMama();
 
-            Momo.playSound(kitten_meow, 1.0, 1.0, false);
+            Momo.playSample(kitten_meow, 1.0, 1.0, false, 2);
 
             ++kittens_found;
           }
@@ -562,7 +567,7 @@ Nini = new class {
 
             kittens[j].returnToMama();
 
-            Momo.playSound(kitten_meow, 1.0, 1.0, false);
+            Momo.playSample(kitten_meow, 1.0, 1.0, false, 2);
 
             ++kittens_found;
           }
